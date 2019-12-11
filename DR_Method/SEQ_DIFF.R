@@ -26,8 +26,9 @@ Merging_function <- function(l_data, dataRef){
 # ------------------------------
 
 ############################################################################################
+############################################################################################
 Seq_calcul <- function( l_data, dataRef, listK){
-
+  print("Dimanche17_nov_TEST6")
   # __________ Clusters initialization ______
   no_cores <- detectCores() # - 1
   cl <- makeCluster(no_cores)
@@ -59,7 +60,7 @@ Seq_calcul <- function( l_data, dataRef, listK){
     colnames(dist2) <- as.character(dataRef[ ,1])
     # ____________________________________________
     seq_c_data <- data.frame()
-    seq_c_data <- foreach(i=1:length(listK),.combine=rbind) %dopar% {
+    seq_c_dataL <- foreach(i=1:length(listK)) %dopar% { #,.combine=rbind
     #for(i in 1:length(listK)){
     k <- listK[i]
     colnames(c_data)[1] <- 'Sample_ID'  ; colnames(dataRef)[1] <- 'Sample_ID'
@@ -139,10 +140,15 @@ Seq_calcul <- function( l_data, dataRef, listK){
       seq_diff_l <- c(seq_diff_l,  S)
       }
       seq_diff_k_df <- data.frame('Sample_ID' = c_data$Sample_ID, 'K' = rep(k, length(c_data$Sample_ID)), 'Seq' = seq_diff_l)
-     # seq_diff_k_df
-      seq_c_data <- rbind( seq_c_data,   seq_diff_k_df )
+
+     list(seq_diff_k_df)
+
     }
-    seq_c_data <- seq_c_data[order(seq_c_data$K),]
+      seq_c_data = data.frame()
+    for (i in seq(1:length(seq_c_dataL))){
+        seq_c_data <- rbind(seq_c_data,seq_c_dataL[[i]][[1]] )
+    }
+    
     global_seq_list[[I]] <- seq_c_data
   }
   stopCluster(cl)
@@ -171,14 +177,17 @@ Seq_main <- function(l_data, dataRef, listK, colnames_res_df = NULL , filename =
   
   # _______________ Writing _________________
   df_to_write <- data.frame('Sample_ID' = global_seq_list[[1]]$Sample_ID, 'K' = global_seq_list[[1]]$K )
+  c_colnames <- c()
   for (i in 1:length(global_seq_list)){
     df_to_write <- cbind(df_to_write, global_seq_list[[i]]$Seq)
+    c_colnames <- c(c_colnames, paste('V', i, sep=""))
+
   }
   if (is.null(colnames_res_df) == FALSE){
     colnames(df_to_write)[3:length(colnames(df_to_write))] <- colnames_res_df
   }
-  else{
-    colnames(df_to_write)[dim(df_to_write)[2]] <- paste('V', i, sep="")
+  if (is.null(colnames_res_df) == TRUE){
+    colnames(df_to_write)[3:dim(df_to_write)[2]] <- c_colnames
   }
   if (is.null(filename) == FALSE) {
     if (file.exists(as.character(filename))){
@@ -203,7 +212,8 @@ Seq_main <- function(l_data, dataRef, listK, colnames_res_df = NULL , filename =
     return(list('Seq_df' = df_to_write, 'Seq_mean_by_k' = data_diff_mean_k))
   }
   if (graphics == TRUE){
-    p <- Seq_graph_by_k('nothing', Names=colnames_res_df, list_col=NULL, data_diff_mean_K = data_diff_mean_k)
+    p <- Seq_graph_by_k('nothing', Names=colnames_res_df, data_diff_mean_K = data_diff_mean_k)
+
   }
   else{ # graphics == False
     p <- 0 # Only to respect algorithm structure
