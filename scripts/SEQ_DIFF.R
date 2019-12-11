@@ -28,7 +28,7 @@ Merging_function <- function(l_data, dataRef){
 ############################################################################################
 ############################################################################################
 Seq_calcul <- function( l_data, dataRef, listK){
-  print("Dimanche17_nov_TEST6")
+  
   # __________ Clusters initialization ______
   no_cores <- detectCores() # - 1
   cl <- makeCluster(no_cores)
