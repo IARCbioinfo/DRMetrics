@@ -1,3 +1,7 @@
+# Dimensionality Reduction Metrics
+
+This repository contains scripts to compute several metrics that evaluate dimensionality reduction techniques:
+
 -   [Sequence difference view](#sequence-difference-view)
     -   [Sequence difference view calculation
         `Seq_calcul`](#sequence-difference-view-calculation-seq_calcul)
@@ -29,9 +33,7 @@ Sequence difference view calculation `Seq_calcul`
 
 This function allows to calculate the sequence diffeence (*S**D*) view
 metrics. For a point *i* the formula is :
-$$
- SD\_k(i) = \\frac{1}{2} \\sum\_{j \\in V^l\_k(i)}\[k-\\rho^l\_i(j)\].\|\\rho^l\_i(j)-\\rho^h\_i(j)\|+ \\frac{1}{2} \\sum\_{j \\in V^h\_k(i)}\[k-\\rho^h\_i(j)\].\|\\rho^l\_i(j)-\\rho^h\_i(j)\|, \\label{EqSD}
-$$
+\(D\_k(i) = \\frac{1}{2} \\sum\_{j \\in V^l\_k(i)}\[k-\\rho^l\_i(j)\].\|\\rho^l\_i(j)-\\rho^h\_i(j)\|+ \\frac{1}{2} \\sum\_{j \\in V^h\_k(i)}\[k-\\rho^h\_i(j)\].\|\\rho^l\_i(j)-\\rho^h\_i(j)\|, \\label{EqSD}\)
  where *V*<sub>*k*</sub><sup>*d*</sup>(*i*) is the *k*−neighborhood of
 *i* in the dimension *d*, and *ρ*<sub>*i*</sub><sup>*d*</sup>(*j*) is
 the rank of *j* in the *k*−neighborhood of *i*
@@ -201,7 +203,7 @@ Sequence difference values permutation test `seq_permutation_test`
 Then this function test the random hypothesis *i.e*.: Does *S**D* values
 calculated on real data set are equivalent to those expected on random
 data ? In order to do this *n* simulations are realized. According these
-simulations the $\\overline{SD}\_k$ are calculated. Finally wilcoxon
+simulations the $\overline{SD}\_k$ are calculated. Finally wilcoxon
 test is effected to compare the mean random distribution and the real
 one.
 
