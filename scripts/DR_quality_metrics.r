@@ -74,7 +74,20 @@ SD_map_f <- function(SD_df, Coords_df, legend_pos = "right" ){
   return(list(SD_Coords_df,pSD_Main))
 }
 
-
+moran_I_knn <-function(expr_data , spatial_data, listK){
+  #expr_data: matrix containing, for each sample (in rows), the values of the features (in columns) for which the MI values will be calculated
+  #spatial_data: matrix containing the coordinates of each sample in the projection used to define the samples neighborhood and thus the weight matrix needed for the MI values computation
+  #listK: vector listing the k values corresponding to the number of samples considered to define samples neighborhood
+  MI_array <- array(NA, dim=c(length(listK), 2, ncol(expr_data)), 
+                    dimnames=list(listK, c("obs","p.value"), colnames(expr_data)) )
+  for(i in 1:length(listK)){
+    KNN_R  = get.knn(spatial_data, k=listK[i], algorithm=c( "brute"))$nn.index
+    m_neigh <- matrix(0, ncol = nrow(KNN_R), nrow =nrow(KNN_R))
+    for (j in 1:nrow(KNN_R)) m_neigh[j,KNN_R[j,]] = 1
+    MI_array[i,,] = apply(expr_data,2,function(co){res=Moran.I(co, m_neigh);     return(c(obs=res$observed,p.value=res$p.value))} )
+  }
+  return(MI_array)
+}
 
 
 
