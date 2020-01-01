@@ -44,10 +44,9 @@ compute_SD_allSamples <- function(distRef,List_projection,k_values,colnames_res_
 }
 
 SD_map_f <- function(SD_df, Coords_df, legend_pos = "right" ){
-  # SD_df data frame such as :
-  #  col1 = Sample_ID, col2 = k, col3 = SD_values
-  # Coords_df data frame such as :
-  # col1 = Sample_ID, col2 = AxisX, col3 = AxisY
+  #SD_df: output of the compute_SD_allSamples function
+  #Coords_df: data frame containing the coordinates of each sample in the projection to use for the representation of the samples
+  #legend_pos: optional argument to define the position of the legend
   SD_tmp = SD_df
   SD_tmp$Sample_ID = as.character( SD_tmp$Sample_ID)
   SD_tmp           = SD_tmp[order(SD_tmp$Sample_ID),]
@@ -144,8 +143,6 @@ Seq_graph_by_k  <-function (data_Seq, Names=NULL, data_diff_mean_K = NULL, log =
     return(p)
   } 
 }
-############################################################################################
-############################################################################################
 seq_permutation_test <- function(data, data_ref, list_K, n=30, graph = TRUE){
   
   if (n > 30){
