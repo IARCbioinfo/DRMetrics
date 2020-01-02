@@ -84,7 +84,7 @@ moran_I_knn <-function(expr_data , spatial_data, listK){
     KNN_R  = get.knn(spatial_data, k=listK[i], algorithm=c( "brute"))$nn.index
     m_neigh <- matrix(0, ncol = nrow(KNN_R), nrow =nrow(KNN_R))
     for (j in 1:nrow(KNN_R)) m_neigh[j,KNN_R[j,]] = 1
-    MI_array[i,,] = apply(expr_data,2,function(co){res=Moran.I(co, m_neigh);     return(c(obs=res$observed,p.value=res$p.value))} )
+    MI_array[i,,] = apply(expr_data,2,function(co){res=Moran.I(co, m_neigh, scaled = T);     return(c(obs=res$observed,p.value=res$p.value))} )
   }
   return(MI_array)
 }
