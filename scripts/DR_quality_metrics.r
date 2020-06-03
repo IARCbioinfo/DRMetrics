@@ -1,3 +1,7 @@
+library(ggplot2)
+library(ape)
+library(foreach)
+library(doParallel)
 
 compute_SD <- function(dist_space1,dist_space2,k){
   #computes SD for a single given point
